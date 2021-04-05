@@ -9,7 +9,6 @@
     "PublicSubnet3CIDR": "10.0.0.76/28",
     "QSS3BucketName": "retinalyze-deployment",
     "QSS3KeyPrefix": "prefix",
-    "RemoteAccessCIDR": "",
-    "VPCCIDR": ""
+    "VPCCIDR": "10.0.0.0/24"
   }
 }
