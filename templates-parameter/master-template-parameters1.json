@@ -1,6 +1,6 @@
 {
   "Parameters": {
-    "AvailabilityZones": "TestEC2Key",
+    "AvailabilityZones": "2",
     "PrivateSubnet1CIDR": "10.0.0.0/28",
     "PrivateSubnet2CIDR": "10.0.0.16/28",
     "PrivateSubnet3CIDR": "10.0.0.31/28",
