@@ -1,4 +1,3 @@
-
 {
   "Parameters": {
     "AvailabilityZones": "TestEC2Key",
@@ -13,3 +12,4 @@
     "RemoteAccessCIDR": "",
     "VPCCIDR": ""
   }
+}
