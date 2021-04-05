@@ -1,0 +1,13 @@
+Parameters:
+  AvailabilityZones: 2
+#  KeyPairName:
+  PrivateSubnet1CIDR: 10.0.0.0/28
+  PrivateSubnet2CIDR: 10.0.0.16/28
+  PrivateSubnet3CIDR: 10.0.0.31/28
+  PublicSubnet1CIDR: 10.0.0.46/28
+  PublicSubnet2CIDR: 10.0.0.61/28
+  PublicSubnet3CIDR: 10.0.0.76/28
+  QSS3BucketName: 'retinalyze-deployment'
+  QSS3KeyPrefix: 'prefix'
+  RemoteAccessCIDR: ''
+  VPCCIDR: ''

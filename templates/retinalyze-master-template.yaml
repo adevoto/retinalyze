@@ -17,10 +17,10 @@ Metadata:
           - PublicSubnet2CIDR
           - PublicSubnet3CIDR
           - RemoteAccessCIDR
-      - Label:
-          default: Amazon EC2 configuration
-        Parameters:
-          - KeyPairName
+#      - Label:
+#          default: Amazon EC2 configuration
+#        Parameters:
+#          - KeyPairName
 #      - Label:
 #          default: Amazon EKS configuration
 #        Parameters:
@@ -73,8 +73,8 @@ Metadata:
     ParameterLabels:
       AvailabilityZones:
         default: Availability Zones
-      KeyPairName:
-        default: SSH key name
+#      KeyPairName:
+#        default: SSH key name
       PrivateSubnet1CIDR:
         default: Private subnet 1 CIDR
       PrivateSubnet2CIDR:
