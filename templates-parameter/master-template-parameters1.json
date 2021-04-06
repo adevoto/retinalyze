@@ -1,6 +1,6 @@
 {
   "Parameters": {
-    "AvailabilityZones": "2",
+    "AvailabilityZones": "us-east-2a, us-east-2b",
     "KeyPairName": "cfn-key-1",
     "PrivateSubnet1CIDR": "10.0.0.0/28",
     "PrivateSubnet2CIDR": "10.0.0.16/28",
