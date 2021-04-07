@@ -546,7 +546,9 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub
-        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template'
+        - 'https://retinalyze-deployment.s3.us-east-2.amazonaws.com/prefix-submodules/templates/aws-vpc.template.yaml'
+        #https://retinalyze-deployment.s3.us-east-2.amazonaws.com/prefix-submodules/templates/aws-vpc.template.yaml
+        #https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}-submodules/quickstart-aws-vpc/templates/aws-vpc.template.yaml
         - S3Bucket: !If
             - UsingDefaultBucket
             - !Sub 'aws-quickstart-${AWS::Region}'
