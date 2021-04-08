@@ -39,14 +39,14 @@ Metadata:
 #        Parameters:
 #          - JDBCDriverBucketName
 #          - JDBCDriverKeyPrefix
-#      - Label:
-#          default: RDS configuration
-#        Parameters:
-#          - SqlServerInstanceName
-#          - DatabasePassword
-#          - AllocatedStorage
-#          - SqlServerVersion
-#          - DBInstanceClass
+      - Label:
+          default: RDS configuration
+        Parameters:
+          - MySQLInstanceName
+          - DatabasePassword
+          - AllocatedStorage
+          - SqlServerVersion
+          - DBInstanceClass
 #          - PostRDSWindowsAmiId
 #      - Label:
 #          default: Amazon Elasticsearch Service configuration
@@ -71,6 +71,7 @@ Metadata:
 #          - R53LBRecordSetName
 
     ParameterLabels:
+      #VPC
       AvailabilityZones:
         default: Availability Zones
       KeyPairName:
@@ -105,18 +106,19 @@ Metadata:
 #        default: Node volume size
 #      KubernetesVersion:
 #        default: Kubernetes version
-#      SqlServerInstanceName:
-#        default: SQL Server instance Name
-#      DatabasePassword:
-#        default: SQL Server database password
-#      AllocatedStorage:
-#        default: Allocated storage for database
-#      SqlServerVersion:
-#        default: SQL Server version
-#      DBInstanceClass:
-#        default: Database instance class
-#      PostRDSWindowsAmiId:
-#        default: AMI ID for EC2 to run postscripts
+      #RDS
+      SqlServerInstanceName:
+        default: SQL Server instance Name
+      DatabasePassword:
+        default: SQL Server database password
+      AllocatedStorage:
+        default: Allocated storage for database
+      SqlServerVersion:
+        default: SQL Server version
+      DBInstanceClass:
+        default: Database instance class
+      PostRDSWindowsAmiId:
+        default: AMI ID for EC2 to run postscripts
 #      ClusterReplicaSetCount:
 #        default: Cluster replica set count
 #      MongoDBVersion:
@@ -152,6 +154,7 @@ Parameters:
     Default: 'us-east-1'
     Description: AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.
     Type: String
+  #VPC
   AvailabilityZones:
     Description: List of Availability Zones to use for the VPC subnets. Three
       Availability Zones are used for this deployment.
@@ -327,65 +330,65 @@ Parameters:
 #    # AllowedValues: [ "1.15", "1.16"]
 #    Default: "1.16"
 #    Description: Kubernetes control plane version.
-#  ### Parameter Added for RDS Provisioning Stack##
-#  SqlServerInstanceName:
-#    Description: RDS SQL Server instance name
-#    Type: String
-#    Default: SqlRdsDB
-#    MinLength: '1'
-#    MaxLength: '63'
-#    AllowedPattern: "[a-zA-Z][a-zA-Z0-9]*"
-#  DatabasePassword:
-#    AllowedPattern: "^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)"
-#    ConstraintDescription: Must contain only alphanumeric characters with at least one capital letter and one number.
-#    Description: Database administrator password.
-#    MaxLength: '41'
-#    MinLength: '8'
-#    NoEcho: 'true'
-#    Type: String
-#  AllocatedStorage:
-#    ConstraintDescription: "Must be a valid number in the range 100–5,120 GiB."
-#    Default: "100"
-#    Description: "Enter the number of gigabytes for Amazon RDS within the range 100–5,120 GiB (5 TiB)."
-#    Type: Number
-#    MinValue: '100'
-#    MaxValue: '5120'
-#  SqlServerVersion:
-#    Default: "SQLServer2016"
-#    Description: "Enter the SQL Server version. SQL Server 2012 and 2016 are supported."
-#    Type: String
-#    AllowedValues:
-#      - "SQLServer2016"
-#  DBInstanceClass:
-#    AllowedValues:
-#      - db.r4.large
-#      - db.r4.xlarge
-#      - db.r4.2xlarge
-#      - db.r4.4xlarge
-#      - db.r4.8xlarge
-#      - db.r4.16xlarge
-#      - db.r5.large
-#      - db.r5.xlarge
-#      - db.r5.2xlarge
-#      - db.r5.4xlarge
-#      - db.r5.12xlarge
-#      - db.r5.24xlarge
-#      - db.m4.large
-#      - db.m4.xlarge
-#      - db.m4.2xlarge
-#      - db.m4.4xlarge
-#      - db.m4.10xlarge
-#      - db.m4.16xlarge
-#      - db.m5.large
-#      - db.m5.xlarge
-#      - db.m5.2xlarge
-#      - db.m5.4xlarge
-#      - db.m5.12xlarge
-#      - db.m5.24xlarge
-#    ConstraintDescription: "Must select a valid database instance type."
-#    Default: db.m5.xlarge
-#    Description: "Name of the compute and memory capacity class of the database instance."
-#    Type: String
+  ### Parameter Added for RDS Provisioning Stack##
+  MySQLInstanceName:
+    Description: RDS MySQL instance name
+    Type: String
+    Default: MySqlRdsDB
+    MinLength: '1'
+    MaxLength: '63'
+    AllowedPattern: "[a-zA-Z][a-zA-Z0-9]*"
+  DatabasePassword:
+    AllowedPattern: "^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)"
+    ConstraintDescription: Must contain only alphanumeric characters with at least one capital letter and one number.
+    Description: Database administrator password.
+    MaxLength: '41'
+    MinLength: '8'
+    NoEcho: 'true'
+    Type: String
+  AllocatedStorage:
+    ConstraintDescription: "Must be a valid number in the range 100–5,120 GiB."
+    Default: "100"
+    Description: "Enter the number of gigabytes for Amazon RDS within the range 100–5,120 GiB (5 TiB)."
+    Type: Number
+    MinValue: '100'
+    MaxValue: '5120'
+  MySQLVersion:
+    Default: "MySQL 8.0.23"
+    Description: "Enter the MySQL version. "
+    Type: String
+    AllowedValues:
+      - "SQLServer2016"
+  DBInstanceClass:
+    AllowedValues:
+      - db.r4.large
+      - db.r4.xlarge
+      - db.r4.2xlarge
+      - db.r4.4xlarge
+      - db.r4.8xlarge
+      - db.r4.16xlarge
+      - db.r5.large
+      - db.r5.xlarge
+      - db.r5.2xlarge
+      - db.r5.4xlarge
+      - db.r5.12xlarge
+      - db.r5.24xlarge
+      - db.m4.large
+      - db.m4.xlarge
+      - db.m4.2xlarge
+      - db.m4.4xlarge
+      - db.m4.10xlarge
+      - db.m4.16xlarge
+      - db.m5.large
+      - db.m5.xlarge
+      - db.m5.2xlarge
+      - db.m5.4xlarge
+      - db.m5.12xlarge
+      - db.m5.24xlarge
+    ConstraintDescription: "Must select a valid database instance type."
+    Default: db.m5.large #smallest
+    Description: "Name of the compute and memory capacity class of the database instance."
+    Type: String
 #  ## Parameters Added for RDS Postscripts Stack##
 #  PostRDSWindowsAmiId:
 #    Description: AMI ID for Windows. The default is Windows_Server-2019-English-Full-SQL_2017_Standard-2019.06.12.
@@ -546,7 +549,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub
-        - 'https://retinalyze-deployment.s3.us-east-2.amazonaws.com/prefix-submodules/templates/aws-vpc.template.yaml'
+        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}-submodules/quickstart-aws-vpc/templates/aws-vpc.template.yaml'
         #https://retinalyze-deployment.s3.us-east-2.amazonaws.com/prefix-submodules/templates/aws-vpc.template.yaml
         #https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}-submodules/quickstart-aws-vpc/templates/aws-vpc.template.yaml
         - S3Bucket: !If
@@ -573,30 +576,30 @@ Resources:
 
 
   ## RDS Provisioning ###
-#  RDSStack:
-#    Type: AWS::CloudFormation::Stack
-#    Properties:
-#      TemplateURL: !Sub
-#        - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/ss2016se-rds.template.yaml
-#        - S3Bucket: !If
-#            - UsingDefaultBucket
-#            - !Sub 'aws-quickstart-${AWS::Region}'
-#            - !Ref 'QSS3BucketName'
-#          S3Region: !If
-#            - UsingDefaultBucket
-#            - !Ref 'AWS::Region'
-#            - !Ref 'QSS3BucketRegion'
-#      Parameters:
-#        SqlServerInstanceName: !Ref 'SqlServerInstanceName'
-#        DatabaseUsername: 'admin'
-#        DatabasePassword: !Ref 'DatabasePassword'
-#        VpcId: !GetAtt VPCStack.Outputs.VPCID
-#        AllocatedStorage: !Ref 'AllocatedStorage'
-#        SqlServerVersion: !Ref 'SqlServerVersion'
-#        PrivateSubnet1: !GetAtt VPCStack.Outputs.PrivateSubnet1AID
-#        PrivateSubnet2: !GetAtt VPCStack.Outputs.PrivateSubnet2AID
-#        PrivateSubnet3: !GetAtt VPCStack.Outputs.PrivateSubnet3AID
-#        DBInstanceClass: !Ref 'DBInstanceClass'
+  RDSStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/templates/mySql-rds.template.yaml
+        - S3Bucket: !If
+            - UsingDefaultBucket
+            - !Sub 'aws-quickstart-${AWS::Region}'
+            - !Ref 'QSS3BucketName'
+          S3Region: !If
+            - UsingDefaultBucket
+            - !Ref 'AWS::Region'
+            - !Ref 'QSS3BucketRegion'
+      Parameters:
+        MySQLInstanceName: !Ref 'MySQLInstanceName'
+        DatabaseUsername: 'admin'
+        DatabasePassword: !Ref 'DatabasePassword'
+        VpcId: !GetAtt VPCStack.Outputs.VPCID
+        AllocatedStorage: !Ref 'AllocatedStorage'
+        MySQLVersion: !Ref 'MySQLVersion'
+        PrivateSubnet1: !GetAtt VPCStack.Outputs.PrivateSubnet1AID
+        PrivateSubnet2: !GetAtt VPCStack.Outputs.PrivateSubnet2AID
+        #PrivateSubnet3: !GetAtt VPCStack.Outputs.PrivateSubnet3AID
+        DBInstanceClass: !Ref 'DBInstanceClass'
 #        InstanceProfileRoleName: !Join
 #          - ''
 #          - - 'rdspostrcriptrole'

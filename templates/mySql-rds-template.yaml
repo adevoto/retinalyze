@@ -1,0 +1,170 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Creates an empty MySQL RDS instace for automated deployments.
+Parameters:
+  MySQLInstanceName:
+    Description: RDS MySQL Instance Name
+    Type: String
+  DatabaseUsername:
+    Description: The database admin account user name.
+    Type: String
+  DatabasePassword:
+    Description: The database admin account password.
+    Type: String
+    NoEcho: 'true'
+  VpcId:
+    Description: ID of the VPC (e.g., vpc-0343606e).
+    Type: AWS::EC2::VPC::Id
+  AllocatedStorage:
+    Description: "Enter the number of Gigabytes for RDS, between 100 GiB and 5120 GiB (5 TiB)."
+    Type: Number
+  MySQLVersion:
+    Description: "Enter the MySQL version."
+    Type: String
+  PrivateSubnet1:
+    Description: Private subnet ID
+    Type: String
+  PrivateSubnet2:
+    Description: Private subnet ID
+    Type: String
+  PrivateSubnet3:
+    Description: Private subnet ID
+    Type: String
+  DBInstanceClass:
+    Type: String
+  InstanceProfileRoleName:
+    Type: String
+
+Mappings:
+  MySQLVersionCode:
+    "latest8":
+      Code: "8.0.23"
+    "latest5.7":
+      Code: "5.7.33"
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: MySQL name, master username, password, and other settings
+        Parameters:
+          - MySQLInstanceName
+          - DatabaseUsername
+          - DatabasePassword
+          - VpcId
+          - AllocatedStorage
+          - SqlServerVersion
+          - DBInstanceClass
+Resources:
+  InstanceProfileRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: [ec2.amazonaws.com]
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonEC2RoleforSSM'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonS3FullAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonEC2FullAccess'
+      Path: "/"
+      Policies:
+        -
+          PolicyName: "DeleteRDSPostScriptStack"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action:
+                  - "cloudformation:DeleteStackInstances"
+                  - "cloudformation:DeleteStack"
+                  - "cloudformation:DeleteStackSet"
+                  - "cloudformation:DeleteChangeSet"
+                  - "ssm:DeleteDocument"
+                  - "ssm:DeleteAssociation"
+                  - "iam:DeleteRolePolicy"
+                  - "iam:RemoveRoleFromInstanceProfile"
+                  - "iam:DetachRolePolicy"
+                  - "iam:DeleteInstanceProfile"
+                  - "iam:DeleteRole"
+                  - "ssm:DescribeParameters"
+                  - "ssm:GetParameter"
+                  - "ssm:GetParameters"
+                  - "ssm:DeleteParameter"
+                  - "ssm:DeleteParameters"
+                Resource: "*"
+      RoleName: !Ref InstanceProfileRoleName
+    Type: AWS::IAM::Role
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref InstanceProfileRole
+      InstanceProfileName: !Ref InstanceProfileRoleName
+
+  MySQLSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: MySQL Security Group
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 1433
+          ToPort: 1433
+          CidrIp: 0.0.0.0/0
+      VpcId:
+        Ref: VpcId
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Group of private subnets for MySQL
+      SubnetIds:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+        - !Ref PrivateSubnet3
+  SQLDatabase:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Delete
+    Properties:
+      VPCSecurityGroups:
+        - Fn::GetAtt:
+            - MySQLSecurityGroup
+            - GroupId
+      DBSubnetGroupName:
+        Ref: DBSubnetGroup
+      DBInstanceIdentifier:
+        Ref: MySQLInstanceName
+      LicenseModel: license-included
+      Engine: MySQL
+      EngineVersion:
+        !FindInMap
+        - MySQLVersionCode
+        - !Ref MySQLVersion
+        - Code
+      MultiAZ: false
+      DBInstanceClass:
+        !Ref DBInstanceClass
+      AllocatedStorage:
+        !Ref AllocatedStorage
+      MasterUsername:
+        Ref: DatabaseUsername
+      MasterUserPassword:
+        Ref: DatabasePassword
+      PubliclyAccessible: false
+      Tags:
+        -
+          Key: "Name"
+          Value: "mysql"
+        -
+          Key: "project"
+          Value: "retinalyze test environment"
+      BackupRetentionPeriod: 1
+Outputs:
+  SQLDatabaseEndpoint:
+    Description: Database endpoint
+    Value: !Sub "${SQLDatabase.Endpoint.Address}:${SQLDatabase.Endpoint.Port}"
+  SQLDatabaseEndpointURL:
+    Description: Database endpoint URL
+    Value: !Sub "${SQLDatabase.Endpoint.Address}"

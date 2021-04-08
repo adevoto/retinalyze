@@ -10,6 +10,12 @@
     "PublicSubnet3CIDR": "10.0.0.76/28",
     "QSS3BucketName": "retinalyze-deployment",
     "QSS3KeyPrefix": "prefix",
-    "VPCCIDR": "10.0.0.0/24"
+    "VPCCIDR": "10.0.0.0/24",
+
+    "MySQLInstanceName": "retinalyze-test",
+    "DatabasePassword": "123456",
+    "AllocatedStorage": "100",
+    "MySQLVersion": "latest8",
+    "DBInstanceClass": "db.m5.large"
   }
 }
