@@ -151,7 +151,7 @@ Metadata:
 #        default: Amazon Route 53 resource record for hosted zone
 Parameters:
   QSS3BucketRegion:
-    Default: 'us-east-1'
+    Default: 'us-east-2'
     Description: AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.
     Type: String
   #VPC
