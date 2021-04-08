@@ -45,7 +45,7 @@ Metadata:
           - MySQLInstanceName
           - DatabasePassword
           - AllocatedStorage
-          - SqlServerVersion
+          - MySQLVersion
           - DBInstanceClass
 #          - PostRDSWindowsAmiId
 #      - Label:
@@ -354,11 +354,12 @@ Parameters:
     MinValue: '100'
     MaxValue: '5120'
   MySQLVersion:
-    Default: "MySQL 8.0.23"
+    Default: "latest8"
     Description: "Enter the MySQL version. "
     Type: String
     AllowedValues:
-      - "SQLServer2016"
+      - "latest8"
+      - "latest5.7"
   DBInstanceClass:
     AllowedValues:
       - db.r4.large
