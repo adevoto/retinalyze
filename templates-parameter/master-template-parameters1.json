@@ -12,7 +12,7 @@
     "QSS3KeyPrefix": "prefix",
     "VPCCIDR": "10.0.0.0/24",
 
-    "MySQLInstanceName": "retinalyze-test",
+    "MySQLInstanceName": "retinalyzeTest",
     "DatabasePassword": "Avaya2013",
     "AllocatedStorage": "100",
     "MySQLVersion": "latest8",
